@@ -1,0 +1,48 @@
+services:
+  # ─────────────────────────────────────────────
+  # Redis — ephemeral session state and cache layer
+  # Equivalent to Railway Redis in production
+  # ─────────────────────────────────────────────
+  redis:
+    image: redis:7-alpine
+    container_name: remnant-redis
+    restart: unless-stopped
+    ports:
+      - "6379:6379"
+    volumes:
+      - remnant-redis-data:/data
+    command: >
+      redis-server
+      --save 60 1
+      --loglevel warning
+      --maxmemory 256mb
+      --maxmemory-policy allkeys-lru
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # ─────────────────────────────────────────────
+  # Redis Commander — web UI for inspecting Redis
+  # Access at http://localhost:8081 during development
+  # ─────────────────────────────────────────────
+  redisinsight:
+      image: redis/redisinsight:latest
+      container_name: remnant-redis-insight
+      restart: unless-stopped
+      ports:
+          - "5540:5540"
+      depends_on:
+          redis:
+              condition: service_healthy
+      profiles:
+          - tools # only starts with: docker compose --profile tools up
+
+volumes:
+  remnant-redis-data:
+    driver: local
+
+networks:
+  default:
+    name: remnant-network

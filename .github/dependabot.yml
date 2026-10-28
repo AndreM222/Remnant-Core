@@ -1,0 +1,62 @@
+version: 2
+updates:
+    # Rust dependencies
+    - package-ecosystem: "cargo"
+      directory: "/"
+      schedule:
+          interval: "weekly"
+          day: "monday"
+          time: "09:00"
+      labels:
+          - "chore"
+          - "dependencies"
+      commit-message:
+          prefix: "chore(deps)"
+      # Group all non-breaking updates together
+      groups:
+          rust-dependencies:
+              patterns:
+                  - "*"
+              update-types:
+                  - "minor"
+                  - "patch"
+      # Limit open PRs to avoid noise
+      open-pull-requests-limit: 5
+      ignore:
+          # Ignore major version bumps — review these manually
+          - dependency-name: "*"
+            update-types: ["version-update:semver-major"]
+
+    # GitHub Actions
+    - package-ecosystem: "github-actions"
+      directory: "/"
+      schedule:
+          interval: "weekly"
+          day: "monday"
+          time: "09:00"
+      labels:
+          - "chore"
+          - "dependencies"
+      commit-message:
+          prefix: "chore(deps)"
+      groups:
+          github-actions:
+              patterns:
+                  - "*"
+
+    # Node dependencies (Husky, Commitizen, etc.)
+    - package-ecosystem: "npm"
+      directory: "/"
+      schedule:
+          interval: "weekly"
+          day: "monday"
+          time: "09:00"
+      labels:
+          - "chore"
+          - "dependencies"
+      commit-message:
+          prefix: "chore(deps)"
+      groups:
+          npm-dependencies:
+              patterns:
+                  - "*"

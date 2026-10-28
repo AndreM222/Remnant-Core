@@ -1,0 +1,45 @@
+name: Generate Changelog
+
+on:
+    push:
+        branches: [main]
+        tags:
+            - 'v*'
+
+env:
+    CARGO_TERM_COLOR: always
+
+jobs:
+    changelog:
+        name: Generate & Commit Changelog
+        runs-on: ubuntu-latest
+
+        permissions:
+            contents: write
+            pull-requests: read
+
+        steps:
+            - name: Checkout Repository
+              uses: actions/checkout@v6
+              with:
+                  fetch-depth: 0
+
+            - name: Generate Changelog
+              uses: orhun/git-cliff-action@v4
+              with:
+                  config: cliff.toml
+                  args: --verbose
+              env:
+                  OUTPUT: CHANGELOG.md
+                  GITHUB_REPO: ${{ github.repository }}
+                  GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+            - name: Commit Changelog
+              run: |
+                  git checkout main
+                  git config user.name 'github-actions[bot]'
+                  git config user.email 'github-actions[bot]@users.noreply.github.com'
+                  set +e
+                  git add CHANGELOG.md
+                  git commit -m "chore(changelog): update CHANGELOG.md [skip ci]"
+                  git push https://${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git main

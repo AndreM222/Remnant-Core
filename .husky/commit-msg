@@ -1,0 +1,15 @@
+# Validate commit message format via commitlint
+npx --no-install commitlint --edit "$1"
+if [ $? -ne 0 ]; then
+    echo "❌ Commit message does not follow Conventional Commits format."
+    echo "   Run 'npm run commit' to use the interactive prompt."
+    exit 1
+fi
+
+# Additional validation via commitizen check
+npx --no-install cz check --commit-msg-file "$1" --allow-abort
+if [ $? -ne 0 ]; then
+    echo "❌ Commit message failed commitizen validation."
+    echo "   Run 'npm run commit' to use the interactive prompt."
+    exit 1
+fi

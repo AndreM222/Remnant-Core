@@ -1,0 +1,39 @@
+# =========================
+# Rust
+# =========================
+/target/
+migration/target/
+migration/Cargo.lock
+
+# =========================
+# Environment
+# =========================
+.env
+.env.local
+.env.production
+
+# =========================
+# Logs
+# =========================
+*.log
+
+# =========================
+# Node / JS Tooling
+# =========================
+node_modules/
+npm-debug.log*
+
+# Husky (we KEEP hooks, ignore local state)
+.husky/_/
+
+# =========================
+# IDE
+# =========================
+.idea/
+*.iml
+flycheck0/
+
+# =========================
+# macOS
+# =========================
+.DS_Store

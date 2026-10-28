@@ -1,0 +1,91 @@
+[package]
+name = "remnant-core"
+version = "0.1.0"
+edition = "2021"
+authors = ["Andre Mossi"]
+description = "Remnant backend — movie data, availability, device sync, and WebSocket server"
+
+[[bin]]
+name = "remnant-core"
+path = "src/main.rs"
+
+[lib]
+name = "remnant_core"
+path = "src/lib.rs"
+
+[dependencies]
+# Web framework
+axum = { version = "0.8.9", features = ["ws", "macros"] }
+tokio = { version = "1.52.3", features = ["full"] }
+tower = "0.5.3"
+tower-http = { version = "0.6.11", features = ["cors", "trace", "compression-gzip"] }
+
+# Database
+sea-orm = { version = "2.0.0-rc.38", default-features = false, features = [
+    "sqlx-postgres",
+    "runtime-tokio-rustls",
+    "macros",
+    "with-chrono",
+    "with-uuid",
+] }
+
+sea-orm-migration = { version = "2.0.0-rc.38", default-features = false, features = [
+    "sqlx-postgres",
+    "runtime-tokio-rustls",
+] }
+
+# Redis cache
+fred = { version = "10.1.0" }
+
+# HTTP client for TMDB
+reqwest = { version = "0.13.4", features = ["json", "rustls"] }
+
+# Serialization
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+
+# Error handling
+anyhow = "1"
+thiserror = "2.0.18"
+
+# Logging and tracing
+tracing = "0.1"
+tracing-subscriber = { version = "0.3", features = ["env-filter", "json"] }
+
+# Environment variables
+dotenvy = "0.15"
+
+# UUID
+uuid = { version = "1", features = ["v4", "serde"] }
+
+# Date and time
+chrono = { version = "0.4", features = ["serde"] }
+
+# Async utilities
+futures = "0.3"
+tokio-stream = "0.1"
+
+# JWT for auth validation
+jsonwebtoken = "10.4.0"
+
+# Rate limiting
+tower_governor = "0.8.0"
+redis_pool = "0.10.0"
+redis = "1.2.2"
+
+[dev-dependencies]
+# Testing
+tokio-test = "0.4.5"
+pretty_assertions = "1"
+mockall = "0.14.0"
+axum-test = "20.1.0"
+
+[profile.release]
+opt-level = 3
+lto = true
+codegen-units = 1
+panic = "abort"
+
+[profile.dev]
+opt-level = 0
+debug = true

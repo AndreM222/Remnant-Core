@@ -1,0 +1,50 @@
+name: Deploy Docs
+
+on:
+    push:
+        branches: [main]
+
+env:
+    CARGO_TERM_COLOR: always
+    RUST_BACKTRACE: 1
+
+jobs:
+    docs:
+        name: Generate & Deploy Docs
+        runs-on: ubuntu-latest
+
+        steps:
+            - name: Checkout Repository
+              uses: actions/checkout@v6
+
+            - name: Install Rust
+              uses: dtolnay/rust-toolchain@stable
+
+            - name: Cache Cargo
+              uses: actions/cache@v5
+              with:
+                  path: |
+                      ~/.cargo/bin/
+                      ~/.cargo/registry/index/
+                      ~/.cargo/registry/cache/
+                      ~/.cargo/git/db/
+                      target/
+                  key: ${{ runner.os }}-cargo-${{ hashFiles('**/Cargo.lock') }}
+
+            - name: Generate Docs
+              run: |
+                  RUSTDOCFLAGS="--default-theme ayu" \
+                  cargo doc --no-deps --document-private-items
+
+            - name: Add redirect index
+              run: |
+                  echo '<meta http-equiv="refresh" content="0; url=noir_core">' \
+                  > target/doc/index.html
+
+            - name: Deploy to Cloudflare Pages
+              if: github.actor != 'dependabot[bot]'
+              uses: cloudflare/wrangler-action@v4
+              with:
+                  apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+                  accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+                  command: pages deploy target/doc --project-name=noir-core-docs

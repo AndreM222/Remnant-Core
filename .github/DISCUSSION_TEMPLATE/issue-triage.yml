@@ -1,0 +1,144 @@
+name: Issue Triage
+description: Report something that is not working correctly in NOIR
+labels: ["needs-triage"]
+body:
+    - type: markdown
+      attributes:
+          value: |
+              > [!IMPORTANT]
+              > Please search [existing Issues](https://github.com/Noir-Browser/Noir-Core/issues?q=sort%3Areactions-desc) and [Discussions](https://github.com/Noir-Browser/Noir-Core/discussions) before opening a new issue. Duplicates will be closed.
+
+    - type: markdown
+      attributes:
+          value: "## Issue Details"
+
+    - type: textarea
+      id: description
+      attributes:
+          label: What is happening?
+          description: |
+              A clear description of the issue. Include what you were doing when it occurred,
+              which feature or area of NOIR is affected, and any screenshots or recordings.
+          placeholder: When I search for a movie and select a streaming platform, NOIR opens the wrong service...
+      validations:
+          required: true
+
+    - type: textarea
+      id: expected
+      attributes:
+          label: What should happen instead?
+          description: Describe the correct behaviour you expected.
+          placeholder: NOIR should open Netflix under my selected profile and navigate directly to the movie.
+      validations:
+          required: true
+
+    - type: textarea
+      id: steps
+      attributes:
+          label: Steps to reproduce
+          description: Exact steps to reproduce the issue. The more specific the better.
+          placeholder: |
+              1. Open NOIR
+              2. Search for "Dune"
+              3. Select Netflix as the platform
+              4. Tap Launch
+              5. Observe that Prime Video opens instead
+      validations:
+          required: true
+
+    - type: dropdown
+      id: area
+      attributes:
+          label: Product area
+          description: Which part of NOIR does this affect?
+          options:
+              - Search & Discovery
+              - Playback & Launch
+              - Device Continuity
+              - Streaming Availability
+              - Account & Profiles
+              - Settings & Shortcuts
+              - Performance
+              - Theater Integration
+              - Social Features
+              - Other
+      validations:
+          required: true
+
+    - type: dropdown
+      id: platform
+      attributes:
+          label: Platform
+          description: Which Apple platform did this occur on?
+          multiple: true
+          options:
+              - macOS
+              - iOS
+              - iPadOS
+              - watchOS
+      validations:
+          required: true
+
+    - type: input
+      id: os_version
+      attributes:
+          label: OS version
+          description: macOS or iOS version number.
+          placeholder: "macOS 26.4"
+      validations:
+          required: true
+
+    - type: input
+      id: app_version
+      attributes:
+          label: NOIR version
+          description: Found in NOIR → About.
+          placeholder: "1.0.0"
+      validations:
+          required: true
+
+    - type: dropdown
+      id: frequency
+      attributes:
+          label: How often does this happen?
+          options:
+              - Every time
+              - Most of the time
+              - Sometimes
+              - Rarely — happened once
+      validations:
+          required: true
+
+    - type: textarea
+      id: logs
+      attributes:
+          label: Logs or error output
+          description: Paste any error messages, crash logs, or console output here.
+          render: text
+      validations:
+          required: false
+
+    - type: textarea
+      id: context
+      attributes:
+          label: Additional context
+          description: |
+              Anything else that might help — streaming service affected, network conditions,
+              which profile was selected, whether a VPN was active, etc.
+      validations:
+          required: false
+
+    - type: markdown
+      attributes:
+          value: "## Before You Submit"
+
+    - type: checkboxes
+      attributes:
+          label: "I confirm that:"
+          options:
+              - label: I searched existing issues and discussions — this is not a duplicate.
+                required: true
+              - label: I have included enough detail to reproduce this issue.
+                required: true
+              - label: I checked the Preview tab and all text is formatted correctly.
+                required: true

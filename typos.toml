@@ -1,0 +1,31 @@
+# typos configuration for remnant-core
+# https://github.com/crate-ci/typos
+
+[default]
+# Check source code files
+extend-ignore-re = [
+    # Ignore hex values
+    "0x[0-9a-fA-F]+",
+    # Ignore UUIDs
+    "[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}",
+    # Ignore base64
+    "[A-Za-z0-9+/]{20,}={0,2}",
+]
+
+[files]
+extend-exclude = [
+    # Exclude generated files
+    "target/",
+    "Cargo.lock",
+    ".git/",
+    "CHANGELOG.md",
+    "node_modules/",
+    # Exclude binary files
+    "*.png",
+    "*.jpg",
+    "*.ico",
+]
+
+[default.extend-words]
+# Add project-specific words that are not typos
+# Example: "remnant" is intentional

@@ -1,0 +1,44 @@
+# Rust build artifacts — these are large and should never go into Docker
+target/
+
+# Environment files — never bake credentials into images
+.env
+.env.local
+.env.production
+
+# Node modules — not needed in the Rust build
+node_modules/
+
+# Git
+.git/
+.gitignore
+
+# IDE
+.idea/
+.vscode/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+logs/
+
+# Documentation
+*.md
+docs/
+
+# Test files — not needed in production image
+tests/
+
+# CI
+.github/
+
+# Docker files themselves
+Dockerfile
+docker-compose.yml
+.dockerignore
+
+# Scripts — not needed in the binary image
+scripts/

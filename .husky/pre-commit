@@ -1,0 +1,31 @@
+echo "Running pre-commit checks..."
+
+# Format check
+echo "Checking formatting..."
+cargo fmt --all -- --check
+if [ $? -ne 0 ]; then
+    echo "❌ Formatting check failed. Run 'cargo fmt --all' to fix."
+    exit 1
+fi
+
+# Lint check
+echo "Running Clippy..."
+cargo clippy --all-targets --all-features -- \
+    -D clippy::unwrap_used \
+    -D clippy::expect_used \
+    -W clippy::pedantic \
+    -A clippy::module_name_repetitions
+if [ $? -ne 0 ]; then
+    echo "❌ Clippy check failed. Fix the warnings above."
+    exit 1
+fi
+
+# Typos check
+echo "Checking for typos..."
+typos --config typos.toml
+if [ $? -ne 0 ]; then
+    echo "❌ Typos found. Fix them or add exceptions to typos.toml."
+    exit 1
+fi
+
+echo "✅ Pre-commit checks passed."

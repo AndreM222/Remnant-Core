@@ -1,0 +1,21 @@
+echo "Running pre-push validation..."
+
+set -o pipefail
+
+# Tests
+echo "Running tests..."
+cargo test --all
+if [ $? -ne 0 ]; then
+    echo "❌ Tests failed. Push aborted."
+    exit 1
+fi
+
+# Security audit
+echo "Running security audit..."
+cargo audit
+if [ $? -ne 0 ]; then
+    echo "❌ Security audit failed. Push aborted."
+    exit 1
+fi
+
+echo "✅ All checks passed. Pushing..."
